@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_firebase_auth/pages/post_page.dart';
 import 'package:my_firebase_auth/service/rtdb_service.dart';
-
 import '../model/student.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,11 +14,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Student> items = [];
+  List<String> studentIds = [];
 
   void getData() async {
-    RTDBService.readData().then((value) => {
+    items.clear();
+    studentIds.clear();
+    RTDBService.readData().then((map) => {
           setState(() {
-            items = value;
+            map!.forEach((key, value) {
+              studentIds.add(key);
+              items.add(value);
+            });
           }),
         });
   }
@@ -68,13 +73,13 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return itemsOfList(items[index]);
+              return itemsOfList(items[index], studentIds[index]);
             }),
       ),
     );
   }
 
-  Widget itemsOfList(Student student) {
+  Widget itemsOfList(Student student, String id) {
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 10),
       padding: const EdgeInsets.all(20),
@@ -108,7 +113,26 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "id: $id",
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey),
+              ),
+              IconButton(
+                onPressed: () {
+                  RTDBService.deleteData(id);
+                  //getData();
+                },
+                icon: const Icon(Icons.delete),
+              ),
+            ],
+          ),
         ],
       ),
     );
