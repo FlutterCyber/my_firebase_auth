@@ -90,29 +90,33 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "${student.firstName}, ${student.lastName}",
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                student.faculty,
+                "${student.firstName}, ${student.lastName}",
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                student.course.toString(),
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
+              CircleAvatar(
+                radius: 25,
+                backgroundImage: NetworkImage(student.imageUrl),
+              )
             ],
+          ),
+          Text(
+            "Faculty: ${student.faculty}",
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            "Course: ${student.course}",
+            style: const TextStyle(
+              fontSize: 16,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
